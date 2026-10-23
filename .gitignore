@@ -1,0 +1,28 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+
+# Google Services (Firebase) - NUNCA SUBIR A GIT
+google-services.json
+app/google-services.json
+
+# Firebase Crashlytics
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+
+# Keystore files (NUNCA SUBIR LLAVES PRIVADAS)
+*.jks
+*.keystore
+keystore.properties

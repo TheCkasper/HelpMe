@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.helpme.app.feature.auth.login.LoginFragment"
+        android:label="Iniciar Sesión"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_register"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_login_to_forgotPassword"
+            app:destination="@id/forgotPasswordFragment" />
+        <action
+            android:id="@+id/action_login_to_home"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.helpme.app.feature.auth.register.RegisterFragment"
+        android:label="Registro"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_register_to_home"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.helpme.app.feature.auth.forgotpassword.ForgotPasswordFragment"
+        android:label="Recuperar Contraseña"
+        tools:layout="@layout/fragment_forgot_password" />
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.helpme.app.feature.home.HomeFragment"
+        android:label="Inicio"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_login"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+</navigation>

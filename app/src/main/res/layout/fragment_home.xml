@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inicio"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/tvWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bienvenido"
+        android:layout_marginBottom="32dp"/>
+
+    <Button
+        android:id="@+id/btnProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mi Perfil (Marcos - En desarrollo)"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnNewReport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nuevo Reporte (Juan - En desarrollo)"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnListReports"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Consultar Reportes (Abner - En desarrollo)"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnMapStats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mapa y Estadísticas (Julia - En desarrollo)"
+        android:layout_marginBottom="32dp"/>
+
+    <Button
+        android:id="@+id/btnLogout"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cerrar Sesión" />
+
+</LinearLayout>

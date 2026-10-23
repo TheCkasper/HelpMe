@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/helpme_background">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/white"
+            app:strokeWidth="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="32dp">
+
+                <!-- Logo Provisional H -->
+                <TextView
+                    android:id="@+id/ivLogo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:paddingHorizontal="16dp"
+                    android:background="@color/helpme_green"
+                    android:text="HelpMe"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <!-- Título -->
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="¡Bienvenido de nuevo!"
+                    android:textColor="@color/helpme_text_primary"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivLogo" />
+
+                <!-- Etiqueta Email -->
+                <TextView
+                    android:id="@+id/tvEmailLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Correo electrónico"
+                    android:textColor="@color/helpme_text_primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+                <!-- Campo Email -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:boxStrokeColor="@color/helpme_divider"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxCornerRadiusTopStart="6dp"
+                    app:boxCornerRadiusTopEnd="6dp"
+                    app:boxCornerRadiusBottomStart="6dp"
+                    app:boxCornerRadiusBottomEnd="6dp"
+                    app:hintEnabled="false"
+                    app:layout_constraintTop_toBottomOf="@id/tvEmailLabel">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="12dp"
+                        android:textSize="14sp"
+                        android:inputType="textEmailAddress"
+                        android:hint="usuario@ejemplo.com" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Etiqueta Password -->
+                <TextView
+                    android:id="@+id/tvPasswordLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Contraseña"
+                    android:textColor="@color/helpme_text_primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tilEmail" />
+
+                <!-- Olvidaste Contraseña -->
+                <TextView
+                    android:id="@+id/tvForgotPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="¿Olvidaste tu contraseña?"
+                    android:textColor="@color/helpme_green"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBaseline_toBaselineOf="@id/tvPasswordLabel" />
+
+                <!-- Campo Password -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:boxStrokeColor="@color/helpme_divider"
+                    app:boxBackgroundColor="@color/white"
+                    app:boxCornerRadiusTopStart="6dp"
+                    app:boxCornerRadiusTopEnd="6dp"
+                    app:boxCornerRadiusBottomStart="6dp"
+                    app:boxCornerRadiusBottomEnd="6dp"
+                    app:hintEnabled="false"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/helpme_text_secondary"
+                    app:layout_constraintTop_toBottomOf="@id/tvPasswordLabel">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="12dp"
+                        android:textSize="14sp"
+                        android:inputType="textPassword"
+                        android:hint="••••••••••••" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Botón Login -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Iniciar sesión"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:backgroundTint="@color/helpme_green"
+                    app:cornerRadius="6dp"
+                    android:paddingVertical="12dp"
+                    app:layout_constraintTop_toBottomOf="@id/tilPassword" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="24dp"
+                    android:elevation="4dp"
+                    android:visibility="gone"
+                    android:indeterminateTint="@color/white"
+                    app:layout_constraintTop_toBottomOf="@id/tilPassword"
+                    app:layout_constraintStart_toStartOf="@id/btnLogin"
+                    app:layout_constraintEnd_toEndOf="@id/btnLogin" />
+
+                <!-- Separador -->
+                <LinearLayout
+                    android:id="@+id/llDivider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/btnLogin">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/helpme_divider" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="12dp"
+                        android:text="o"
+                        android:textColor="@color/helpme_text_secondary"
+                        android:textSize="14sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="@color/helpme_divider" />
+                </LinearLayout>
+
+                <!-- Botón Google (Placeholder) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGoogle"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Iniciar sesión con Google"
+                    android:textAllCaps="false"
+                    android:textColor="@color/helpme_text_secondary"
+                    app:strokeColor="@color/helpme_divider"
+                    app:cornerRadius="6dp"
+                    android:paddingVertical="12dp"
+                    app:icon="@android:drawable/ic_menu_myplaces"
+                    app:iconTint="@null"
+                    app:iconGravity="textStart"
+                    app:layout_constraintTop_toBottomOf="@id/llDivider" />
+
+                <!-- Registrarse -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnGoogle">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¿No tienes una cuenta? "
+                        android:textColor="@color/helpme_text_secondary"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvSignUp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Regístrate aquí"
+                        android:textColor="@color/helpme_green"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
