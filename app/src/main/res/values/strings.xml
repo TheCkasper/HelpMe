@@ -1,3 +1,76 @@
 <resources>
     <string name="app_name">HelpMe</string>
+    <string name="login_title">¡Te damos la bienvenida!</string>
+    <string name="email_label">Correo electrónico</string>
+    <string name="email_hint">usuario@ejemplo.com</string>
+    <string name="password_label">Contraseña</string>
+    <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="login_button">Iniciar sesión</string>
+    <string name="or">o</string>
+    <string name="google_sign_in">Iniciar sesión con Google</string>
+    <string name="no_account">¿No tienes una cuenta?</string>
+    <string name="sign_up">Regístrate aquí</string>
+    <string name="register_title">Crear cuenta</string>
+    <string name="full_name_hint">Nombre completo</string>
+    <string name="confirm_password_hint">Confirmar contraseña</string>
+    <string name="register_button">Registrarse</string>
+    <string name="reset_password_title">Recuperar contraseña</string>
+    <string name="reset_password_description">Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</string>
+    <string name="send_link_button">Enviar enlace</string>
+    <string name="reset_link_sent">Se envió el enlace de recuperación.</string>
+    <string name="home_title">Inicio</string>
+    <string name="welcome">Bienvenido</string>
+    <string name="welcome_uid">Bienvenido, UID: %1$s</string>
+    <string name="loading">Cargando…</string>
+    <string name="profile_button">Mi perfil (Marcos - En desarrollo)</string>
+    <string name="new_report_button">Nuevo reporte de avistamiento</string>
+    <string name="list_reports_button">Consultar reportes</string>
+    <string name="map_stats_button">Mapa y estadísticas (Julia - En desarrollo)</string>
+    <string name="logout_button">Cerrar sesión</string>
+    <string name="module_in_development">Módulo en desarrollo</string>
+    <string name="google_sign_in_unavailable">El inicio de sesión con Google aún no está disponible.</string>
+    <string name="login_screen_label">Iniciar sesión</string>
+    <string name="register_screen_label">Registro</string>
+    <string name="reset_password_screen_label">Recuperar contraseña</string>
+    <string name="reports_title">Reportes</string>
+    <string name="reports_local_storage_notice">Modo local: los reportes se guardan solo en este dispositivo y no se sincronizan con Firebase.</string>
+    <string name="create_report_title">Nuevo reporte de avistamiento</string>
+    <string name="create_report_button">Crear reporte</string>
+    <string name="report_description_label">Descripción</string>
+    <string name="report_description_hint">Describe lo ocurrido</string>
+    <string name="report_photo_label">Fotografía del avistamiento</string>
+    <string name="take_photo_button">Tomar foto</string>
+    <string name="select_photo_button">Galería</string>
+    <string name="camera_permission_required">Se necesita permiso de cámara para tomar fotografías.</string>
+    <string name="camera_open_error">No se pudo abrir la cámara.</string>
+    <string name="report_location_label">Ubicación</string>
+    <string name="get_location_button">Usar ubicación actual</string>
+    <string name="latitude_hint">Latitud</string>
+    <string name="longitude_hint">Longitud</string>
+    <string name="report_date_label">Fecha y hora: %1$s</string>
+    <string name="report_type">Avistamiento</string>
+    <string name="report_empty">Aún no hay reportes. Crea el primero.</string>
+    <string name="reports_loading">Cargando reportes…</string>
+    <string name="report_load_error">No se pudieron cargar los reportes.</string>
+    <string name="report_save_error">No se pudo guardar el reporte. Inténtalo de nuevo.</string>
+    <string name="report_status_error">No se pudo actualizar el estado.</string>
+    <string name="report_photo_required">Selecciona una fotografía.</string>
+    <string name="report_location_required">Ingresa la latitud y longitud o permite obtener la ubicación.</string>
+    <string name="report_location_invalid">La latitud debe estar entre -90 y 90 y la longitud entre -180 y 180.</string>
+    <string name="report_description_required">Escribe una descripción.</string>
+    <string name="location_permission_required">Se necesita permiso de ubicación para usar el GPS. También puedes ingresar las coordenadas manualmente.</string>
+    <string name="location_unavailable">No se pudo obtener la ubicación. Ingresa las coordenadas manualmente.</string>
+    <string name="report_detail_title">Detalle del reporte</string>
+    <string name="report_status_label">Estado</string>
+    <string name="report_location_coordinates">Latitud: %1$s, longitud: %2$s</string>
+    <string name="open_map_button">Ver ubicación en el mapa</string>
+    <string name="map_unavailable">No hay una aplicación de mapas disponible.</string>
+    <string name="report_not_found">No se encontró el reporte.</string>
+    <string name="home_tab">Inicio</string>
+    <string name="reports_tab">Reportes</string>
+    <string-array name="report_statuses">
+        <item>Pendiente</item>
+        <item>En proceso</item>
+        <item>Resuelto</item>
+    </string-array>
 </resources>

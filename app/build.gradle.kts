@@ -41,7 +41,9 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.8.5")
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
+    implementation(libs.recyclerview)
     implementation(libs.material)
+    implementation(libs.coil)
     
     // Lifecycle
     implementation(libs.lifecycle.viewmodel.ktx)

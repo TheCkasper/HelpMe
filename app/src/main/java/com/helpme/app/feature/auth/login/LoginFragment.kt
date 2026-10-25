@@ -51,7 +51,7 @@ class LoginFragment : Fragment() {
         }
         
         binding.btnGoogle.setOnClickListener {
-            Toast.makeText(requireContext(), "Google Sign In no implementado en demo", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), R.string.google_sign_in_unavailable, Toast.LENGTH_SHORT).show()
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

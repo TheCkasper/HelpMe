@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.helpme.app.R
 import com.helpme.app.databinding.FragmentForgotPasswordBinding
 import com.helpme.app.domain.model.OperationResult
 import com.helpme.app.feature.auth.AuthViewModel
@@ -52,7 +53,7 @@ class ForgotPasswordFragment : Fragment() {
                         is OperationResult.Success -> {
                             binding.progressBar.visibility = View.GONE
                             binding.btnReset.isEnabled = true
-                            Toast.makeText(requireContext(), "Enlace enviado (Mock)", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), R.string.reset_link_sent, Toast.LENGTH_SHORT).show()
                             viewModel.resetStates()
                         }
                         is OperationResult.Error -> {

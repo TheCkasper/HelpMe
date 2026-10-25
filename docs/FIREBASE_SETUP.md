@@ -15,3 +15,5 @@ Este proyecto fue diseñado con una arquitectura que permite sustituir los repos
 6. Eliminar el indicativo de "Modo Demostración" de la UI si se considera necesario.
 
 **ADVERTENCIA:** Nunca subas el archivo `google-services.json` o claves API al repositorio público.
+
+La sección de reportes usa Realtime Database en `reportes/{reporteId}` y guarda las fotografías en `reportes/{uid}/{reporteId}/{nombre_archivo}` de Storage, según el contrato de `DATA_CONTRACT.md`. Configura reglas que permitan leer los reportes y que solo usuarios autenticados puedan crearlos o actualizar su estado. La app necesita el permiso de Internet (declarado en el manifiesto). Si no encuentra la configuración de Firebase, usa un repositorio de demostración que persiste reportes e imágenes únicamente en el dispositivo; esos datos no se sincronizan con Firebase.

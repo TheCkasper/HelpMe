@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.helpme.app.feature.auth.login.LoginFragment"
-        android:label="Iniciar Sesión"
+        android:label="@string/login_screen_label"
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_login_to_register"
@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.helpme.app.feature.auth.register.RegisterFragment"
-        android:label="Registro"
+        android:label="@string/register_screen_label"
         tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_register_to_home"
@@ -38,19 +38,58 @@
     <fragment
         android:id="@+id/forgotPasswordFragment"
         android:name="com.helpme.app.feature.auth.forgotpassword.ForgotPasswordFragment"
-        android:label="Recuperar Contraseña"
+        android:label="@string/reset_password_screen_label"
         tools:layout="@layout/fragment_forgot_password" />
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.helpme.app.feature.home.HomeFragment"
-        android:label="Inicio"
+        android:label="@string/home_title"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_home_to_login"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_home_to_report_list"
+            app:destination="@id/reportListFragment" />
+        <action
+            android:id="@+id/action_home_to_report_create"
+            app:destination="@id/reportCreateFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reportListFragment"
+        android:name="com.helpme.app.feature.reports.ReportListFragment"
+        android:label="@string/reports_title"
+        tools:layout="@layout/fragment_report_list">
+        <action
+            android:id="@+id/action_report_list_to_create"
+            app:destination="@id/reportCreateFragment" />
+        <action
+            android:id="@+id/action_report_list_to_detail"
+            app:destination="@id/reportDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reportCreateFragment"
+        android:name="com.helpme.app.feature.reports.ReportCreateFragment"
+        android:label="@string/create_report_title"
+        tools:layout="@layout/fragment_report_create">
+        <action
+            android:id="@+id/action_report_create_to_detail"
+            app:destination="@id/reportDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reportDetailFragment"
+        android:name="com.helpme.app.feature.reports.ReportDetailFragment"
+        android:label="@string/report_detail_title"
+        tools:layout="@layout/fragment_report_detail">
+        <argument
+            android:name="reportId"
+            app:argType="string" />
     </fragment>
 
 </navigation>

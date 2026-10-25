@@ -35,8 +35,12 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         binding.btnProfile.setOnClickListener { showNotImplemented() }
-        binding.btnNewReport.setOnClickListener { showNotImplemented() }
-        binding.btnListReports.setOnClickListener { showNotImplemented() }
+        binding.btnNewReport.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_report_create)
+        }
+        binding.btnListReports.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_report_list)
+        }
         binding.btnMapStats.setOnClickListener { showNotImplemented() }
         
         binding.btnLogout.setOnClickListener {
@@ -51,10 +55,10 @@ class HomeFragment : Fragment() {
                             findNavController().navigate(R.id.action_home_to_login)
                         }
                         is SessionState.Authenticated -> {
-                            binding.tvWelcome.text = "Bienvenido, UID: ${state.uid}"
+                            binding.tvWelcome.text = getString(R.string.welcome_uid, state.uid)
                         }
                         is SessionState.Loading -> {
-                            binding.tvWelcome.text = "Cargando..."
+                            binding.tvWelcome.text = getString(R.string.loading)
                         }
                     }
                 }
@@ -63,7 +67,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun showNotImplemented() {
-        Toast.makeText(requireContext(), "Módulo en desarrollo", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), R.string.module_in_development, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
