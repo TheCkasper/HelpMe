@@ -51,6 +51,15 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_home_to_createReport"
+            app:destination="@id/createReportFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/createReportFragment"
+        android:name="com.helpme.app.feature.report.create.CreateReportFragment"
+        android:label="Crear Reporte"
+        tools:layout="@layout/fragment_create_report" />
 
 </navigation>

@@ -35,7 +35,9 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         binding.btnProfile.setOnClickListener { showNotImplemented() }
-        binding.btnNewReport.setOnClickListener { showNotImplemented() }
+        binding.btnNewReport.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_createReport)
+        }
         binding.btnListReports.setOnClickListener { showNotImplemented() }
         binding.btnMapStats.setOnClickListener { showNotImplemented() }
         
