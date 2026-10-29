@@ -2,12 +2,12 @@
 
 ¡Bienvenidos al repositorio de **HelpMe**! Este documento es el punto de partida para que todos sepamos en qué estado se encuentra el proyecto, qué sigue y qué le toca a cada integrante.
 
-## 📌 ESTADO ACTUAL (¡Firebase Conectado!)
-- **Autenticación Real:** El proyecto ya no usa datos falsos. El inicio de sesión y registro están conectados a la nube real de Firebase Authentication.
-- **Base de Datos Configurada:** Firebase Realtime Database está lista y las dependencias ya están en los archivos Gradle.
-- **Arquitectura Base:** MVVM, View Binding y Jetpack Navigation Component.
-- **Identidad Visual:** Tema verde implementado en `colors.xml` y `themes.xml`.
-- **Navegación Inicial:** `HomeFragment` tiene botones (placeholders) que ustedes deben conectar a los fragmentos de sus respectivos módulos.
+## 📌 ESTADO ACTUAL (¡Firebase Conectado & Cambios Recientes!)
+- **Autenticación Real:** Inicio de sesión y registro integrados con Firebase Authentication.
+- **Dashboard Limpio:** Se eliminó la lista de botones temporales en `HomeFragment`. Ahora la app muestra un panel informativo sobre impacto comunitario con acceso directo a "Nuevo Reporte Rápido".
+- **Barra de Navegación Inferior (BottomNavigationView):** Configurada e integrada para alternar libremente entre Inicio, Reportes, Mapa y Perfil.
+- **Corrección de Errores & Estabilidad:** Se unificaron recursos XML (`strings.xml`, `file_paths.xml`, `locales_config.xml`) y se creó la estructura base del `ProfileFragment` para evitar cierres de la app.
+- **Base de Datos:** Firebase Realtime Database lista y enlazada en el contenedor de dependencias (`AppContainer`).
 
 ---
 
@@ -27,7 +27,16 @@ Como el proyecto ya está conectado a Firebase y el archivo secreto de conexión
 Creen las carpetas de sus módulos dentro de `app/src/main/java/com/helpme/app/feature/` y enlacen sus pantallas en `app/src/main/res/navigation/nav_graph.xml`.
 
 👤 **Marcos (Módulo 2 - Perfil):** 
-- **Tarea:** Mostrar y editar los datos del usuario logueado en Realtime Database. Permitir agregar el DPI (opcional).
+- **Estado:** Ya fue creada la clase base `ProfileFragment.kt` en `feature/profile/` para prevenir cierres.
+- **Qué debe hacer:**
+  1. Diseñar el layout XML `fragment_profile.xml` con:
+     - Campo de texto para Nombre Completo (editable).
+     - Campo de texto para Correo Electrónico (deshabilitado/lectura).
+     - Campo de texto para DPI (opcional, máximo 13 dígitos).
+     - Botón "Guardar Cambios".
+     - Botón "Cerrar Sesión" (llama a `AppContainer.authRepository.signOut()`).
+  2. Implementar `ProfileViewModel` para leer el nodo `usuarios/{uid}` de Realtime Database al abrir la pantalla y rellenar los campos.
+  3. Guardar las modificaciones enviando la actualización al nodo `usuarios/{uid}` respetando el `DATA_CONTRACT.md` (`nombre`, `correo`, `dpi`, `fechaActualizacion`).
 
 📸 **Juan (Módulo 3 - Creación de reportes):** 
 - **Tarea:** Pantalla para elegir el tipo de incidencia, agregar descripción y capturar latitud/longitud. 

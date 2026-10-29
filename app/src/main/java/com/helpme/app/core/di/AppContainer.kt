@@ -4,11 +4,7 @@ import android.content.Context
 import com.google.firebase.FirebaseApp
 import com.helpme.app.data.firebase.FirebaseAuthRepository
 import com.helpme.app.data.firebase.FirebaseReportRepository
-<<<<<<< HEAD
 import com.helpme.app.data.mock.MockAuthRepository
-import com.helpme.app.data.mock.MockReportRepository
-=======
->>>>>>> main
 import com.helpme.app.data.mock.MockUserRepository
 import com.helpme.app.domain.repository.AuthRepository
 import com.helpme.app.domain.repository.ReportRepository
@@ -16,7 +12,6 @@ import com.helpme.app.domain.repository.UserRepository
 
 object AppContainer {
     private var applicationContext: Context? = null
-    private var usesLocalReportStorage = false
 
     fun init(context: Context) {
         applicationContext = context.applicationContext
@@ -40,25 +35,6 @@ object AppContainer {
     }
 
     val reportRepository: ReportRepository by lazy {
-<<<<<<< HEAD
-        if (isFirebaseAvailable) {
-            FirebaseReportRepository()
-        } else {
-            usesLocalReportStorage = true
-            MockReportRepository(requireApplicationContext())
-        }
-    }
-
-    val reportsAreStoredLocally: Boolean
-        get() {
-            reportRepository
-            return usesLocalReportStorage
-        }
-
-    private fun requireApplicationContext(): Context =
-        checkNotNull(applicationContext) { "AppContainer.init must be called before accessing repositories." }
-=======
         FirebaseReportRepository()
     }
->>>>>>> main
 }

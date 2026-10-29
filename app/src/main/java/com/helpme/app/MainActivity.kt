@@ -27,7 +27,9 @@ class MainActivity : AppCompatActivity() {
                 destination.id == R.id.homeFragment ||
                 destination.id == R.id.reportListFragment ||
                 destination.id == R.id.reportCreateFragment ||
-                destination.id == R.id.reportDetailFragment
+                destination.id == R.id.reportDetailFragment ||
+                destination.id == R.id.mapFragment ||
+                destination.id == R.id.profileFragment
             ) View.VISIBLE else View.GONE
         }
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

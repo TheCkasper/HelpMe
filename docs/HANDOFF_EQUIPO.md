@@ -12,6 +12,12 @@ La base de datos Realtime Database está lista para recibir sus datos.
 3. Para la base de datos, lean el `DATA_CONTRACT.md`. **Sus modelos de Kotlin deben tener exactamente esos nombres en las variables.**
 4. Para saber qué usuario está utilizando la app, pueden inyectar `AppContainer.authRepository` y leer el flujo `observeSession()`.
 
+## Instrucciones Específicas para Marcos (Módulo 2 - Perfil)
+- La clase plantilla `ProfileFragment.kt` ya está creada en `com.helpme.app.feature.profile`.
+- Debes crear la interfaz XML `fragment_profile.xml` con campos para Nombre, Correo (solo lectura), DPI (opcional) y el botón de Guardar.
+- Al cargar el fragmento, debes consultar en Realtime Database la ruta `usuarios/{uid}` usando el UID de la sesión actual.
+- Al presionar Guardar, actualiza los valores `nombre`, `correo`, `dpi` y `fechaActualizacion` respetando las llaves exactas definidas en `DATA_CONTRACT.md`.
+
 ## Recomendaciones
 - Utilicen View Binding como está configurado en `build.gradle.kts`.
-- La navegación provisional se hace con Intent/Activities o Fragments (ver `HomeActivity` para los puntos de entrada).
+- La navegación se gestiona centralizadamente mediante Jetpack Navigation (`nav_graph.xml`) y la barra inferior `BottomNavigationView`.

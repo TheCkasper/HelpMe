@@ -22,12 +22,12 @@
     <string name="welcome">Bienvenido</string>
     <string name="welcome_uid">Bienvenido, UID: %1$s</string>
     <string name="loading">Cargando…</string>
-    <string name="profile_button">Mi perfil (Marcos - En desarrollo)</string>
+    <string name="profile_button">Mi perfil</string>
     <string name="new_report_button">Nuevo reporte de avistamiento</string>
     <string name="list_reports_button">Consultar reportes</string>
-    <string name="map_stats_button">Mapa y estadísticas (Julia - En desarrollo)</string>
+    <string name="map_stats_button">Mapa y estadísticas</string>
     <string name="logout_button">Cerrar sesión</string>
-    <string name="module_in_development">Módulo en desarrollo</string>
+    <string name="module_in_development">Función no disponible temporalmente</string>
     <string name="google_sign_in_unavailable">El inicio de sesión con Google aún no está disponible.</string>
     <string name="login_screen_label">Iniciar sesión</string>
     <string name="register_screen_label">Registro</string>
@@ -73,4 +73,13 @@
         <item>En proceso</item>
         <item>Resuelto</item>
     </string-array>
+
+    <!-- Dashboard Strings -->
+    <string name="dashboard_title">Panel Principal</string>
+    <string name="dashboard_hero_title">¿Ves algo que mejorar?</string>
+    <string name="dashboard_hero_desc">Ayuda a tu comunidad reportando incidentes y mejorando nuestro entorno.</string>
+    <string name="dashboard_quick_report_btn">Nuevo Reporte Rápido</string>
+    <string name="dashboard_impact_title">Tu Impacto Comunitario</string>
+    <string name="dashboard_impact_desc">Gracias por ser parte del cambio. Juntos hacemos la diferencia reportando incidentes y cuidando nuestra ciudad.</string>
+
 </resources>
