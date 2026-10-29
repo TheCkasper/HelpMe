@@ -4,8 +4,11 @@ import android.content.Context
 import com.google.firebase.FirebaseApp
 import com.helpme.app.data.firebase.FirebaseAuthRepository
 import com.helpme.app.data.firebase.FirebaseReportRepository
+<<<<<<< HEAD
 import com.helpme.app.data.mock.MockAuthRepository
 import com.helpme.app.data.mock.MockReportRepository
+=======
+>>>>>>> main
 import com.helpme.app.data.mock.MockUserRepository
 import com.helpme.app.domain.repository.AuthRepository
 import com.helpme.app.domain.repository.ReportRepository
@@ -37,6 +40,7 @@ object AppContainer {
     }
 
     val reportRepository: ReportRepository by lazy {
+<<<<<<< HEAD
         if (isFirebaseAvailable) {
             FirebaseReportRepository()
         } else {
@@ -53,4 +57,8 @@ object AppContainer {
 
     private fun requireApplicationContext(): Context =
         checkNotNull(applicationContext) { "AppContainer.init must be called before accessing repositories." }
+=======
+        FirebaseReportRepository()
+    }
+>>>>>>> main
 }

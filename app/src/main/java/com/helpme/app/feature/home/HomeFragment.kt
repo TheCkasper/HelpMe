@@ -36,12 +36,12 @@ class HomeFragment : Fragment() {
         
         binding.btnProfile.setOnClickListener { showNotImplemented() }
         binding.btnNewReport.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_report_create)
+            findNavController().navigate(R.id.action_home_to_createReport)
         }
-        binding.btnListReports.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_report_list)
+        binding.btnListReports.setOnClickListener { showNotImplemented() }
+        binding.btnMapStats.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_map)
         }
-        binding.btnMapStats.setOnClickListener { showNotImplemented() }
         
         binding.btnLogout.setOnClickListener {
             viewModel.logout()
