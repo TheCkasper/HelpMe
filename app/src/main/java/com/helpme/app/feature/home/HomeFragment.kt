@@ -39,7 +39,9 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_home_to_createReport)
         }
         binding.btnListReports.setOnClickListener { showNotImplemented() }
-        binding.btnMapStats.setOnClickListener { showNotImplemented() }
+        binding.btnMapStats.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_map)
+        }
         
         binding.btnLogout.setOnClickListener {
             viewModel.logout()

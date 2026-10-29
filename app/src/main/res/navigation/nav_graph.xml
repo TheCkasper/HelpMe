@@ -54,7 +54,15 @@
         <action
             android:id="@+id/action_home_to_createReport"
             app:destination="@id/createReportFragment" />
+        <action
+            android:id="@+id/action_home_to_map"
+            app:destination="@id/mapFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.helpme.app.feature.map.MapFragment"
+        android:label="Mapa y Estadísticas" />
 
     <fragment
         android:id="@+id/createReportFragment"

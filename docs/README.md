@@ -41,6 +41,46 @@ Creen las carpetas de sus módulos dentro de `app/src/main/java/com/helpme/app/f
 
 ---
 
+## 🗺️ Módulo de mapa: tecnología, funciones e integración
+
+El mapa está implementado en [MapFragment](../app/src/main/java/com/helpme/app/feature/map/MapFragment.kt) como un `WebView` que carga [map.html](../app/src/main/assets/map.html). La interfaz web usa **Leaflet 1.9.4** (CSS y JavaScript desde unpkg) y mosaicos de **Esri World Street Map**; si un mosaico falla, intenta usar **OpenStreetMap**. Se necesita conexión a Internet para cargar estas librerías y los mosaicos. El HTML conserva la atribución de Esri.
+
+La comunicación entre Android y el mapa se realiza con [LeafletMapBridge](../app/src/main/java/com/helpme/app/feature/map/LeafletMapBridge.kt), registrado como `AndroidMapBridge` en el `WebView`. Android envía marcadores y ubicación al JavaScript; el mapa notifica a Android cuando termina de cargar y cuando se selecciona un marcador. La pantalla y sus controles se construyen en [MapUiBuilder](../app/src/main/java/com/helpme/app/feature/map/MapUiBuilder.kt).
+
+### Funciones disponibles
+
+- Muestra incidencias con coordenadas válidas. Los marcadores se ajustan para incluir los resultados visibles.
+- Colorea cada marcador según su estado: pendiente (ámbar), en proceso (azul) o resuelto (verde). Al tocarlo, muestra tipo, estado y descripción; también abre la ficha de la incidencia en Android.
+- Permite centrar el mapa en la ubicación actual. Solicita permiso de ubicación en tiempo de ejecución; si no se concede o no se obtiene una ubicación, usa Cobán como centro predeterminado.
+- Filtra reportes por día, semana o mes (con fecha de referencia), estado, actividad (todas, activas o no activas) y tipo de incidencia.
+- Presenta métricas del periodo y una tabla agrupada por tipo y estado. Los reportes sin coordenadas se cuentan en las estadísticas, pero no se dibujan en el mapa.
+- Lee los reportes en tiempo real desde Firebase Realtime Database, en el nodo `reportes`, mediante [FirebaseMapRepository](../app/src/main/java/com/helpme/app/feature/map/MapRepository.kt).
+
+El filtrado, la selección y el cálculo de estadísticas están en [MapViewModel](../app/src/main/java/com/helpme/app/feature/map/MapViewModel.kt). El modelo esperado es [Report](../app/src/main/java/com/helpme/app/domain/model/Report.kt): `reporteId`, `tipo`, `tipoId`, `descripcion`, `latitud`, `longitud`, `estado` y `fechaCreacion` son especialmente relevantes para el mapa y sus estadísticas.
+
+### Reutilizar el mapa en otro módulo
+
+Si el módulo pertenece a esta misma app, es preferible reutilizar las clases de `feature/map` en vez de mantener una copia divergente. Para copiar también la pantalla y sus funciones, integra lo siguiente:
+
+1. Copia la carpeta `feature/map` (incluye `MapFragment.kt`, `MapUiBuilder.kt`, `MapState.kt`, `MapViewModel.kt`, `MapRepository.kt` y `LeafletMapBridge.kt`) y el recurso `app/src/main/assets/map.html`. Ajusta el `package` si el nuevo módulo usa otro.
+2. Usa el modelo `Report` del proyecto o adapta el repositorio y el mapeo para que proporcionen identificador, tipo, descripción, estado, latitud, longitud y fecha de creación. Si guardas los datos en otro lugar, implementa `MapRepository.observeReports()` para ese origen y conserva el flujo de `List<Report>` o adapta el `ViewModel`.
+3. En el layout de la pantalla agrega un `WebView` y configura JavaScript y el puente con el mismo nombre que espera el HTML. El patrón utilizado por este módulo es:
+
+   ```kotlin
+   webView.settings.javaScriptEnabled = true
+   webView.addJavascriptInterface(mapBridge, LeafletMapBridge.BRIDGE_NAME)
+   webView.loadUrl("file:///android_asset/map.html")
+   ```
+
+   `mapBridge` debe ser una instancia de `LeafletMapBridge` con callbacks para `onMarkerClick` y `onMapReady`. Una vez cargado el mapa, envía los marcadores con `LeafletMapBridge.updateMarkersInWebView(webView, markers)`; para centrarlo, usa `LeafletMapBridge.setUserLocationInWebView(webView, lat, lng, isUserLocation)`. Los marcadores se envían como `ReportMarker`. Actualiza el mapa cuando cambien los datos y destruye el `WebView` al destruir la vista del fragmento, como hace `MapFragment`.
+4. Agrega al `AndroidManifest.xml` los permisos `INTERNET`, `ACCESS_FINE_LOCATION` y `ACCESS_COARSE_LOCATION`. Si el módulo requiere la ubicación actual, solicita los permisos de ubicación en tiempo de ejecución; `INTERNET` es necesario para Leaflet y los mosaicos externos.
+5. Si quieres toda la pantalla de estadísticas, conserva también los controles y la observación de `MapUiState` de `MapFragment`; si solo necesitas el mapa, puedes omitir `MapUiBuilder` y el filtrado/estadísticas, pero mantén el `WebView`, el puente, el modelo de marcadores y el HTML.
+6. Agrega el nuevo fragmento a `app/src/main/res/navigation/nav_graph.xml` y configura una acción desde la pantalla que lo abrirá.
+
+No se requiere una dependencia Gradle adicional para Leaflet: se carga desde el HTML. Este módulo sí usa las dependencias Android existentes de `WebView`, Firebase Realtime Database, Lifecycle y Coroutines. Verifica que la política de red de la app permita acceder a unpkg, Esri y OpenStreetMap.
+
+---
+
 ## 🧠 ¿Cómo usar Firebase para guardar sus datos (Módulos 2, 3, 4 y 5)?
 
 En Firebase Realtime Database **NO EXISTEN LAS TABLAS**. Es un gran diccionario de datos JSON.

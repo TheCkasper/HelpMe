@@ -54,6 +54,9 @@ dependencies {
     // Coroutines
     implementation(libs.coroutines.android)
     
+    // Location
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
