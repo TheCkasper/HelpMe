@@ -26,3 +26,7 @@ crashlytics-build.properties
 *.jks
 *.keystore
 keystore.properties
+
+# APKs generados - NUNCA SUBIR A GIT
+*.apk
+/apks/

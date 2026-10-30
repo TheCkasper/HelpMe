@@ -18,17 +18,21 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.helpme.app.R
 import com.helpme.app.databinding.FragmentCreateReportBinding
 import com.helpme.app.domain.model.OperationResult
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.InputStream
 
 class CreateReportFragment : Fragment() {
@@ -41,6 +45,7 @@ class CreateReportFragment : Fragment() {
     private var currentPhotoBase64: String = ""
     private var selectedTypeKey: String = ""
     private var selectedTypeId: String = ""
+    private var cameraImageUri: Uri? = null
 
     private val incidentTypes = listOf(
         "Alumbrado Público" to "INC_ALUMBRADO",
@@ -55,6 +60,30 @@ class CreateReportFragment : Fragment() {
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let { processImageUri(it) }
+    }
+
+    private val takePictureLauncher = registerForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { success: Boolean ->
+        if (success && cameraImageUri != null) {
+            processImageUri(cameraImageUri!!)
+        } else {
+            Toast.makeText(requireContext(), "No se capturó la fotografía", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val cameraPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            launchCamera()
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "Permiso de cámara denegado. Puedes seleccionar una imagen de la galería.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     private val locationPermissionLauncher = registerForActivityResult(
@@ -83,8 +112,19 @@ class CreateReportFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupDropdown()
+        checkArgumentsForType()
         setupListeners()
         observeViewModel()
+    }
+
+    private fun checkArgumentsForType() {
+        val label = arguments?.getString("selectedTypeLabel")
+        val id = arguments?.getString("selectedTypeId")
+        if (!label.isNullOrBlank()) {
+            selectedTypeKey = label
+            selectedTypeId = id.orEmpty()
+            binding.actvReportType.setText(label, false)
+        }
     }
 
     private fun setupDropdown() {
@@ -108,14 +148,14 @@ class CreateReportFragment : Fragment() {
         }
 
         binding.btnPresetLocation.setOnClickListener {
-            // Ubicación prederminada (Guatemala)
+            // Ubicación predeterminada (Guatemala)
             binding.etLatitude.setText("14.6349")
             binding.etLongitude.setText("-90.5069")
             Toast.makeText(requireContext(), "Coordenadas fijadas a Guatemala", Toast.LENGTH_SHORT).show()
         }
 
         binding.btnPickImage.setOnClickListener {
-            pickImageLauncher.launch("image/*")
+            showImageSourceOptionsDialog()
         }
 
         binding.btnClearImage.setOnClickListener {
@@ -140,6 +180,56 @@ class CreateReportFragment : Fragment() {
                 longitud = longitude,
                 fotoBase64OrUrl = currentPhotoBase64
             )
+        }
+    }
+
+    private fun showImageSourceOptionsDialog() {
+        val options = arrayOf("Tomar foto con la cámara", "Seleccionar de la galería")
+        AlertDialog.Builder(requireContext())
+            .setTitle("Agregar fotografía de evidencia")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> checkCameraPermissionAndLaunch()
+                    1 -> pickImageLauncher.launch("image/*")
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun checkCameraPermissionAndLaunch() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                launchCamera()
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                Toast.makeText(requireContext(), "Se necesita permiso de cámara para tomar la evidencia", Toast.LENGTH_SHORT).show()
+                cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+            else -> {
+                cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+        }
+    }
+
+    private fun launchCamera() {
+        try {
+            val cacheDir = File(requireContext().cacheDir, "images")
+            if (!cacheDir.exists()) cacheDir.mkdirs()
+            val photoFile = File(cacheDir, "photo_${System.currentTimeMillis()}.jpg")
+
+            cameraImageUri = FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.fileprovider",
+                photoFile
+            )
+
+            takePictureLauncher.launch(cameraImageUri)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "No se pudo iniciar la cámara", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -177,7 +267,6 @@ class CreateReportFragment : Fragment() {
             binding.etLongitude.setText(lastKnown.longitude.toString())
             Toast.makeText(requireContext(), "Ubicación GPS obtenida", Toast.LENGTH_SHORT).show()
         } else {
-            // Intentar escuchar ubicación
             val listener = object : LocationListener {
                 override fun onLocationChanged(location: Location) {
                     binding.etLatitude.setText(location.latitude.toString())
@@ -203,7 +292,6 @@ class CreateReportFragment : Fragment() {
             inputStream?.close()
 
             if (bitmap != null) {
-                // Redimensionar imagen para optimizar espacio en Realtime Database
                 val scaledBitmap = Bitmap.createScaledBitmap(bitmap, 400, (400 * (bitmap.height.toDouble() / bitmap.width)).toInt(), true)
                 val byteArrayOutputStream = ByteArrayOutputStream()
                 scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream)
@@ -211,10 +299,10 @@ class CreateReportFragment : Fragment() {
                 currentPhotoBase64 = "data:image/jpeg;base64," + Base64.encodeToString(byteArray, Base64.NO_WRAP)
 
                 binding.ivReportPhoto.setImageBitmap(scaledBitmap)
-                Toast.makeText(requireContext(), "Imagen procesada correctamente", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Fotografía adjuntada correctamente", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
-            Toast.makeText(requireContext(), "Error al cargar la imagen", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Error al procesar la fotografía", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -230,9 +318,19 @@ class CreateReportFragment : Fragment() {
                         is OperationResult.Success -> {
                             binding.progressBar.visibility = View.GONE
                             binding.btnSubmitReport.isEnabled = true
-                            Toast.makeText(requireContext(), "¡Reporte guardado exitosamente en Firebase!", Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireContext(), "¡Reporte guardado exitosamente!", Toast.LENGTH_SHORT).show()
+
+                            val code = "#HP-${System.currentTimeMillis().toString().takeLast(6)}"
+                            com.helpme.app.core.notification.NotificationHelper.showNewReportNotification(
+                                context = requireContext(),
+                                reportId = code,
+                                title = if (selectedTypeKey.isNotBlank()) selectedTypeKey else "Nueva Incidencia",
+                                description = binding.etDescription.text.toString().take(60)
+                            )
+
                             viewModel.resetState()
-                            findNavController().popBackStack()
+                            val bundle = androidx.core.os.bundleOf("reportCode" to code)
+                            findNavController().navigate(R.id.action_createReport_to_sent, bundle)
                         }
                         is OperationResult.Error -> {
                             binding.progressBar.visibility = View.GONE

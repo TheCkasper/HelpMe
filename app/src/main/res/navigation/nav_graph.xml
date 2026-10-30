@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/splashFragment">
 
+    <!-- Splash Screen -->
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.helpme.app.feature.auth.splash.SplashFragment"
+        android:label="Splash"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splash_to_home"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splash_to_login"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Login -->
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.helpme.app.feature.auth.login.LoginFragment"
@@ -24,6 +42,7 @@
             app:popUpToInclusive="true" />
     </fragment>
 
+    <!-- Register -->
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.helpme.app.feature.auth.register.RegisterFragment"
@@ -36,12 +55,14 @@
             app:popUpToInclusive="true" />
     </fragment>
 
+    <!-- Forgot Password -->
     <fragment
         android:id="@+id/forgotPasswordFragment"
         android:name="com.helpme.app.feature.auth.forgotpassword.ForgotPasswordFragment"
         android:label="Recuperar Contraseña"
         tools:layout="@layout/fragment_forgot_password" />
 
+    <!-- Home (Dashboard) -->
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.helpme.app.feature.home.HomeFragment"
@@ -55,12 +76,108 @@
         <action
             android:id="@+id/action_home_to_profile"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_home_to_report_list"
+            app:destination="@id/reportListFragment" />
+        <action
+            android:id="@+id/action_home_to_report_create"
+            app:destination="@id/reportCreateFragment" />
+        <action
+            android:id="@+id/action_home_to_map"
+            app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_home_to_detail"
+            app:destination="@id/reportDetailFragment" />
     </fragment>
 
+    <!-- Type Selection -->
+    <fragment
+        android:id="@+id/typeSelectionFragment"
+        android:name="com.helpme.app.feature.report.TypeSelectionFragment"
+        android:label="Seleccionar Tipo"
+        tools:layout="@layout/fragment_type_selection">
+        <action
+            android:id="@+id/action_typeSelection_to_createReport"
+            app:destination="@id/reportCreateFragment" />
+    </fragment>
+
+    <!-- Create Report -->
+    <fragment
+        android:id="@+id/reportCreateFragment"
+        android:name="com.helpme.app.feature.report.create.CreateReportFragment"
+        android:label="Crear Reporte"
+        tools:layout="@layout/fragment_create_report">
+        <action
+            android:id="@+id/action_createReport_to_sent"
+            app:destination="@id/reportSentFragment"
+            app:popUpTo="@id/homeFragment" />
+    </fragment>
+
+    <!-- Report Sent Confirmation -->
+    <fragment
+        android:id="@+id/reportSentFragment"
+        android:name="com.helpme.app.feature.report.ReportSentFragment"
+        android:label="Reporte Enviado"
+        tools:layout="@layout/fragment_report_sent">
+        <action
+            android:id="@+id/action_reportSent_to_map"
+            app:destination="@id/mapFragment"
+            app:popUpTo="@id/homeFragment" />
+        <action
+            android:id="@+id/action_reportSent_to_home"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Report List -->
+    <fragment
+        android:id="@+id/reportListFragment"
+        android:name="com.helpme.app.feature.reports.ReportListFragment"
+        android:label="Reportes"
+        tools:layout="@layout/fragment_report_list">
+        <action
+            android:id="@+id/action_report_list_to_detail"
+            app:destination="@id/reportDetailFragment" />
+    </fragment>
+
+    <!-- Report Detail -->
+    <fragment
+        android:id="@+id/reportDetailFragment"
+        android:name="com.helpme.app.feature.reports.ReportDetailFragment"
+        android:label="Detalle del Reporte"
+        tools:layout="@layout/fragment_report_detail" />
+
+    <!-- Map & Stats -->
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.helpme.app.feature.map.MapFragment"
+        android:label="Mapa y Estadísticas" />
+
+    <!-- Profile -->
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.helpme.app.feature.profile.ProfileFragment"
         android:label="Mi perfil"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profile_to_login"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_profile_to_settings"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_profile_to_report_list"
+            app:destination="@id/reportListFragment" />
+    </fragment>
+
+    <!-- Settings -->
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.helpme.app.feature.settings.SettingsFragment"
+        android:label="Configuración"
+        tools:layout="@layout/fragment_settings" />
 
 </navigation>

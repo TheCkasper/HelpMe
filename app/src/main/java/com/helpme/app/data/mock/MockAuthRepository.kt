@@ -43,6 +43,13 @@ class MockAuthRepository : AuthRepository {
         return OperationResult.Success
     }
 
+    override suspend fun signInWithGoogle(idToken: String): AuthResult {
+        delay(1000)
+        val uid = "GOOGLE_UID_DEMO"
+        sessionFlow.value = SessionState.Authenticated(uid)
+        return AuthResult.Success(uid)
+    }
+
     override suspend fun signOut() {
         delay(500)
         sessionFlow.value = SessionState.Unauthenticated

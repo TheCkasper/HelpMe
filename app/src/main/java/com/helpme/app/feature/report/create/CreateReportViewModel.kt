@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class CreateReportViewModel(
     private val reportRepository: ReportRepository = AppContainer.reportRepository,
@@ -57,6 +58,15 @@ class CreateReportViewModel(
                 return@launch
             }
 
+            var userName = ""
+            try {
+                val db = com.google.firebase.database.FirebaseDatabase.getInstance().reference
+                val snap = db.child("users").child(uid).child("name").get().await()
+                userName = snap.getValue(String::class.java) ?: ""
+            } catch (e: Exception) {
+                // Ignore
+            }
+
             val newReport = Report(
                 tipo = tipo,
                 tipoId = tipoId,
@@ -66,6 +76,7 @@ class CreateReportViewModel(
                 longitud = longitud,
                 estado = "Pendiente",
                 usuarioId = uid,
+                nombreUsuario = userName,
                 fechaCreacion = System.currentTimeMillis(),
                 fechaActualizacion = System.currentTimeMillis()
             )

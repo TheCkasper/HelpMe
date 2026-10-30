@@ -16,19 +16,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crear Nuevo Reporte"
-            android:textSize="22sp"
+            android:text="Crear reporte"
+            android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="?attr/colorPrimary"
-            android:layout_marginBottom="4dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Módulo 3 - Captura de Incidencias"
-            android:textSize="14sp"
-            android:textColor="@android:color/darker_gray"
-            android:layout_marginBottom="20dp" />
+            android:textColor="@color/helpme_text_primary"
+            android:layout_marginBottom="16dp" />
 
         <!-- Tipo de Incidencia (DropDown) -->
         <com.google.android.material.textfield.TextInputLayout
@@ -200,13 +192,17 @@
             android:visibility="gone"
             android:layout_marginBottom="12dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSubmitReport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:text="Guardar Reporte en Firebase"
-            android:textSize="16sp" />
+            android:text="Enviar reporte"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:backgroundTint="@color/helpme_green"
+            app:cornerRadius="8dp" />
 
     </LinearLayout>
 

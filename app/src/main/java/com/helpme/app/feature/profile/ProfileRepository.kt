@@ -23,8 +23,13 @@ class ProfileRepository(
     ): ValueEventListener {
         val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val profile = snapshot.getValue(UserProfile::class.java)
-                    ?: UserProfile(uid = uid, email = currentEmail)
+                var profile = snapshot.getValue(UserProfile::class.java)
+                if (profile == null) {
+                    profile = UserProfile(uid = uid, email = currentEmail)
+                    // Initial creation in Realtime Database if absent
+                    userRef(uid).child("email").setValue(currentEmail)
+                    userRef(uid).child("rol").setValue("Ciudadano")
+                }
                 onData(profile.copy(uid = uid))
             }
 
@@ -52,7 +57,8 @@ class ProfileRepository(
         val updates = mapOf<String, Any?>(
             "name" to name,
             "phone" to phone,
-            "dpi" to dpi
+            "dpi" to dpi,
+            "email" to currentEmail
         )
         userRef(uid).updateChildren(updates)
             .addOnSuccessListener { onResult(Result.success(Unit)) }

@@ -83,6 +83,13 @@ class AuthViewModel : ViewModel() {
         }
     }
 
+    fun loginWithGoogle(idToken: String) {
+        viewModelScope.launch {
+            _loginState.value = AuthResult.Loading
+            _loginState.value = authRepository.signInWithGoogle(idToken)
+        }
+    }
+
     fun logout() {
         viewModelScope.launch {
             authRepository.signOut()

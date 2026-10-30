@@ -46,6 +46,17 @@ class FirebaseAuthRepository : AuthRepository {
         }
     }
 
+    override suspend fun signInWithGoogle(idToken: String): AuthResult {
+        return try {
+            val credential = com.google.firebase.auth.GoogleAuthProvider.getCredential(idToken, null)
+            val result = auth.signInWithCredential(credential).await()
+            val uid = result.user?.uid ?: return AuthResult.Error("Error al iniciar sesión con Google")
+            AuthResult.Success(uid)
+        } catch (e: Exception) {
+            AuthResult.Error(e.message ?: "Error al iniciar sesión con Google")
+        }
+    }
+
     override suspend fun signOut() {
         auth.signOut()
     }
