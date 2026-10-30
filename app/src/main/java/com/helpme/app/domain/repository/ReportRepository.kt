@@ -9,5 +9,6 @@ interface ReportRepository {
     fun observeReports(): Flow<List<Report>>
     suspend fun getReportById(reportId: String): Report?
     suspend fun updateReportStatus(reportId: String, newStatus: String): OperationResult
+    suspend fun deleteReport(reportId: String): OperationResult
     fun observeUserReports(userId: String): Flow<List<Report>>
 }

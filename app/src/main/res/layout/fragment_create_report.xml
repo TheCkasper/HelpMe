@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/helpme_background"
     android:fillViewport="true"
     tools:context=".feature.report.create.CreateReportFragment">
 
@@ -16,11 +17,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:text="Crear reporte"
-            android:textSize="24sp"
-            android:textStyle="bold"
             android:textColor="@color/helpme_text_primary"
-            android:layout_marginBottom="16dp" />
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <!-- Tipo de Incidencia (DropDown) -->
         <com.google.android.material.textfield.TextInputLayout
@@ -28,15 +29,16 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tipo de Incidencia *"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            android:hint="Tipo de Incidencia *">
 
             <AutoCompleteTextView
                 android:id="@+id/actvReportType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                android:padding="12dp" />
+                android:padding="12dp"
+                android:textColor="@color/helpme_text_primary" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -46,16 +48,17 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Descripción detallada *"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            android:hint="Descripción detallada *">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="top|start"
                 android:inputType="textMultiLine"
                 android:minLines="3"
-                android:gravity="top|start" />
+                android:textColor="@color/helpme_text_primary" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,32 +66,34 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ubicación GPS"
-            android:textStyle="bold"
-            android:textSize="16sp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:text="Ubicación GPS"
+            android:textColor="@color/helpme_text_primary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilLatitude"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginEnd="4dp"
+                android:layout_weight="1"
                 android:hint="Latitud *">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etLatitude"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberSigned|numberDecimal" />
+                    android:inputType="numberSigned|numberDecimal"
+                    android:textColor="@color/helpme_text_primary" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,15 +102,16 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="4dp"
+                android:layout_weight="1"
                 android:hint="Longitud *">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etLongitude"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberSigned|numberDecimal" />
+                    android:inputType="numberSigned|numberDecimal"
+                    android:textColor="@color/helpme_text_primary" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -114,27 +120,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnGetLocation"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginEnd="4dp"
+                android:layout_weight="1"
                 android:text="Obtener GPS"
-                app:icon="@android:drawable/ic_menu_mylocation" />
+                android:textColor="@color/helpme_green"
+                app:icon="@android:drawable/ic_menu_mylocation"
+                app:iconTint="@color/helpme_green"
+                app:strokeColor="@color/helpme_green" />
 
             <Button
                 android:id="@+id/btnPresetLocation"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="4dp"
-                android:text="Ubicación Guatemala" />
+                android:layout_weight="1"
+                android:text="Ubicación Guatemala"
+                android:textColor="@color/helpme_green" />
 
         </LinearLayout>
 
@@ -142,44 +152,48 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="Fotografía de Evidencia"
-            android:textStyle="bold"
+            android:textColor="@color/helpme_text_primary"
             android:textSize="16sp"
-            android:layout_marginBottom="8dp" />
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/ivReportPhoto"
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:scaleType="centerCrop"
-            android:background="#E0E0E0"
-            android:src="@android:drawable/ic_menu_camera"
+            android:layout_marginBottom="12dp"
+            android:background="@color/helpme_divider"
             android:contentDescription="Vista previa de foto"
-            android:layout_marginBottom="12dp" />
+            android:scaleType="centerCrop"
+            android:src="@android:drawable/ic_menu_camera" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="24dp">
+            android:layout_marginBottom="24dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnPickImage"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginEnd="4dp"
-                android:text="Seleccionar Imagen" />
+                android:layout_weight="1"
+                android:text="Seleccionar Imagen"
+                android:textColor="@color/helpme_green"
+                app:strokeColor="@color/helpme_green" />
 
             <Button
                 android:id="@+id/btnClearImage"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="4dp"
-                android:text="Quitar Imagen" />
+                android:layout_weight="1"
+                android:text="Quitar Imagen"
+                android:textColor="@color/helpme_text_secondary" />
 
         </LinearLayout>
 
@@ -189,8 +203,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="12dp"
+            android:indeterminateTint="@color/helpme_green"
+            android:visibility="gone" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSubmitReport"

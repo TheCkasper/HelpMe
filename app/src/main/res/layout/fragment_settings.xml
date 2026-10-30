@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/helpme_card_background"
             app:cardCornerRadius="14dp"
             app:cardElevation="2dp"
             app:strokeWidth="0dp">
@@ -87,12 +87,66 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Card Apariencia y Tema -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/helpme_card_background"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Apariencia y Tema"
+                    android:textColor="@color/helpme_text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <RadioGroup
+                    android:id="@+id/rgThemeOptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <RadioButton
+                        android:id="@+id/rbThemeLight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Modo Claro"
+                        android:textColor="@color/helpme_text_secondary" />
+
+                    <RadioButton
+                        android:id="@+id/rbThemeDark"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Modo Oscuro"
+                        android:textColor="@color/helpme_text_secondary" />
+
+                    <RadioButton
+                        android:id="@+id/rbThemeSystem"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Por defecto del sistema"
+                        android:textColor="@color/helpme_text_secondary" />
+                </RadioGroup>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- Card Ubicación y GPS -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/helpme_card_background"
             app:cardCornerRadius="14dp"
             app:cardElevation="2dp"
             app:strokeWidth="0dp">
@@ -129,7 +183,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/helpme_card_background"
             app:cardCornerRadius="14dp"
             app:cardElevation="2dp"
             app:strokeWidth="0dp">
@@ -166,7 +220,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/helpme_card_background"
             app:cardCornerRadius="14dp"
             app:cardElevation="2dp"
             app:strokeWidth="0dp">

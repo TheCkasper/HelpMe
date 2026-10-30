@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.helpme.app.R
 import com.helpme.app.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -36,6 +38,24 @@ class SettingsFragment : Fragment() {
         binding.switchPushNotifs.isChecked = prefs.getBoolean("push_notifs_enabled", true)
         binding.switchEmergencyAlerts.isChecked = prefs.getBoolean("emergency_alerts_enabled", true)
         binding.switchAutoLocation.isChecked = prefs.getBoolean("auto_location_enabled", true)
+
+        // Theme Options Handling
+        val savedTheme = prefs.getInt("app_theme_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        when (savedTheme) {
+            AppCompatDelegate.MODE_NIGHT_NO -> binding.rbThemeLight.isChecked = true
+            AppCompatDelegate.MODE_NIGHT_YES -> binding.rbThemeDark.isChecked = true
+            else -> binding.rbThemeSystem.isChecked = true
+        }
+
+        binding.rgThemeOptions.setOnCheckedChangeListener { _, checkedId ->
+            val selectedMode = when (checkedId) {
+                R.id.rbThemeLight -> AppCompatDelegate.MODE_NIGHT_NO
+                R.id.rbThemeDark -> AppCompatDelegate.MODE_NIGHT_YES
+                else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            }
+            prefs.edit().putInt("app_theme_mode", selectedMode).apply()
+            AppCompatDelegate.setDefaultNightMode(selectedMode)
+        }
 
         binding.switchPushNotifs.setOnCheckedChangeListener { _, isChecked ->
             prefs.edit().putBoolean("push_notifs_enabled", isChecked).apply()

@@ -83,6 +83,15 @@ class FirebaseReportRepository : ReportRepository {
         }
     }
 
+    override suspend fun deleteReport(reportId: String): OperationResult {
+        return try {
+            database.child(reportId).removeValue().await()
+            OperationResult.Success
+        } catch (e: Exception) {
+            OperationResult.Error(e.message ?: "Error al eliminar el reporte de Firebase")
+        }
+    }
+
     override fun observeUserReports(userId: String): Flow<List<Report>> = callbackFlow {
         val query = database.orderByChild("usuarioId").equalTo(userId)
         val listener = object : ValueEventListener {

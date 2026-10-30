@@ -65,6 +65,7 @@ class RegisterFragment : Fragment() {
                             is AuthResult.Success -> {
                                 binding.progressBar.visibility = View.GONE
                                 binding.btnRegister.isEnabled = true
+                                findNavController().navigate(R.id.action_register_to_home)
                                 viewModel.resetStates()
                             }
                             is AuthResult.Error -> {

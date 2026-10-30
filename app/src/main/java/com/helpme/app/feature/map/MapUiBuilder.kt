@@ -1,6 +1,7 @@
 package com.helpme.app.feature.map
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.TypedValue
@@ -21,6 +22,14 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 
 class MapUiBuilder(private val context: Context) {
+
+    private val isDark: Boolean
+        get() = (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+
+    private val bgPrimary: Int get() = if (isDark) Color.parseColor("#121212") else Color.parseColor("#F4F6F8")
+    private val bgCard: Int get() = if (isDark) Color.parseColor("#1E1E1E") else Color.WHITE
+    private val textPrimary: Int get() = if (isDark) Color.parseColor("#F9FAFB") else Color.parseColor("#212121")
+    private val textSecondary: Int get() = if (isDark) Color.parseColor("#9CA3AF") else Color.parseColor("#616161")
 
     // Main Containers
     val rootScrollView: ScrollView = ScrollView(context)
@@ -86,7 +95,7 @@ class MapUiBuilder(private val context: Context) {
             ViewGroup.LayoutParams.MATCH_PARENT
         )
         rootScrollView.isFillViewport = true
-        rootScrollView.setBackgroundColor(Color.parseColor("#F4F6F8"))
+        rootScrollView.setBackgroundColor(bgPrimary)
 
         mainLayout.orientation = LinearLayout.VERTICAL
         mainLayout.layoutParams = LinearLayout.LayoutParams(
@@ -97,43 +106,21 @@ class MapUiBuilder(private val context: Context) {
         mainLayout.setPadding(p, p, p, p)
         rootScrollView.addView(mainLayout)
 
-        // 1. Header with Back Button
         buildHeader()
-
-        // 2. Loading Indicator
-        loadingBar.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply {
-            gravity = Gravity.CENTER_HORIZONTAL
-            topMargin = dpToPx(16)
-            bottomMargin = dpToPx(16)
-        }
-        mainLayout.addView(loadingBar)
-
-        // 3. Error Card
+        buildLoadingBar()
         buildErrorCard()
-
-        // 4. Filters Section
         buildFiltersSection()
-
-        // 5. Map Card
         buildMapCard()
-
-        // 6. Selected Report Detail Card
         buildSelectedReportCard()
-
-        // 7. Statistics Section
         buildStatisticsSection()
     }
 
     private fun buildHeader() {
-        // Back Button
         btnBack.apply {
             text = "← Volver al Inicio"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-            setBackgroundColor(Color.parseColor("#E8EAF6"))
-            setTextColor(Color.parseColor("#1A237E"))
+            setBackgroundColor(if (isDark) Color.parseColor("#10B981") else Color.parseColor("#E8EAF6"))
+            setTextColor(if (isDark) Color.WHITE else Color.parseColor("#1A237E"))
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -145,16 +132,28 @@ class MapUiBuilder(private val context: Context) {
             text = "Mapa de Incidencias y Estadísticas"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f)
             setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.parseColor("#1A237E"))
+            setTextColor(textPrimary)
         }
         val tvSubtitle = TextView(context).apply {
             text = "Monitoreo ciudadano en tiempo real"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
-            setTextColor(Color.parseColor("#5C6BC0"))
+            setTextColor(textSecondary)
             setPadding(0, dpToPx(2), 0, dpToPx(12))
         }
         mainLayout.addView(tvTitle)
         mainLayout.addView(tvSubtitle)
+    }
+
+    private fun buildLoadingBar() {
+        loadingBar.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity = Gravity.CENTER_HORIZONTAL
+            topMargin = dpToPx(16)
+            bottomMargin = dpToPx(16)
+        }
+        mainLayout.addView(loadingBar)
     }
 
     private fun buildErrorCard() {
@@ -200,7 +199,7 @@ class MapUiBuilder(private val context: Context) {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply { bottomMargin = dpToPx(12) }
-            setCardBackgroundColor(Color.WHITE)
+            setCardBackgroundColor(bgCard)
             cardElevation = dpToPx(2).toFloat()
             radius = dpToPx(10).toFloat()
         }
@@ -211,22 +210,20 @@ class MapUiBuilder(private val context: Context) {
             setPadding(p, p, p, p)
         }
 
-        // Section Title
         val tvFilterHeader = TextView(context).apply {
             text = "Filtros de Búsqueda"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
             setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.parseColor("#212121"))
+            setTextColor(textPrimary)
             setPadding(0, 0, 0, dpToPx(8))
         }
         container.addView(tvFilterHeader)
 
-        // Period Buttons
         val periodLabel = TextView(context).apply {
             text = "Periodo:"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
             setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.parseColor("#616161"))
+            setTextColor(textSecondary)
         }
         container.addView(periodLabel)
 
@@ -244,12 +241,11 @@ class MapUiBuilder(private val context: Context) {
         periodBar.addView(btnPeriodMonth)
         container.addView(periodBar)
 
-        // Date Picker Button
         btnSelectDate.apply {
             text = "Fecha de referencia: Hoy"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-            setBackgroundColor(Color.parseColor("#E8EAF6"))
-            setTextColor(Color.parseColor("#3F51B5"))
+            setBackgroundColor(if (isDark) Color.parseColor("#374151") else Color.parseColor("#E8EAF6"))
+            setTextColor(if (isDark) Color.parseColor("#10B981") else Color.parseColor("#3F51B5"))
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -257,7 +253,6 @@ class MapUiBuilder(private val context: Context) {
         }
         container.addView(btnSelectDate)
 
-        // Status & Activity Spinners Row
         val spinnersRow = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
             weightSum = 2f
@@ -274,7 +269,7 @@ class MapUiBuilder(private val context: Context) {
             text = "Estado:"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
             setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.parseColor("#616161"))
+            setTextColor(textSecondary)
         }
         statusLayout.addView(tvStatusLbl)
         statusLayout.addView(spinnerStatus)
@@ -289,7 +284,7 @@ class MapUiBuilder(private val context: Context) {
             text = "Actividad:"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
             setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.parseColor("#616161"))
+            setTextColor(textSecondary)
         }
         activityLayout.addView(tvActLbl)
         activityLayout.addView(spinnerActivity)
@@ -298,7 +293,6 @@ class MapUiBuilder(private val context: Context) {
         spinnersRow.addView(activityLayout)
         container.addView(spinnersRow)
 
-        // Types Switches Container
         typesSwitchesContainer.apply {
             orientation = LinearLayout.VERTICAL
             setPadding(0, dpToPx(4), 0, 0)
@@ -325,7 +319,7 @@ class MapUiBuilder(private val context: Context) {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply { bottomMargin = dpToPx(12) }
-            setCardBackgroundColor(Color.WHITE)
+            setCardBackgroundColor(bgCard)
             cardElevation = dpToPx(2).toFloat()
             radius = dpToPx(10).toFloat()
         }
@@ -336,11 +330,10 @@ class MapUiBuilder(private val context: Context) {
             setPadding(p, p, p, p)
         }
 
-        // Location Control Bar
         btnMyLocation.apply {
             text = "📍 Centrar en Mi Ubicación"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-            setBackgroundColor(Color.parseColor("#0288D1"))
+            setBackgroundColor(Color.parseColor("#10B981"))
             setTextColor(Color.WHITE)
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -349,7 +342,6 @@ class MapUiBuilder(private val context: Context) {
         }
         container.addView(btnMyLocation)
 
-        // Map Frame Layout for WebView + Empty Notice
         val mapFrame = android.widget.FrameLayout(context).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -362,16 +354,17 @@ class MapUiBuilder(private val context: Context) {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
+            setBackgroundColor(Color.TRANSPARENT)
         }
         mapFrame.addView(webViewMap)
 
         tvEmptyMapNotice.apply {
             text = "No hay incidencias para los filtros seleccionados"
-            setTextColor(Color.parseColor("#757575"))
+            setTextColor(textSecondary)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
             setTypeface(null, Typeface.BOLD)
             gravity = Gravity.CENTER
-            setBackgroundColor(Color.parseColor("#CCFFFFFF"))
+            setBackgroundColor(if (isDark) Color.parseColor("#CC1E1E1E") else Color.parseColor("#CCFFFFFF"))
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
@@ -381,7 +374,6 @@ class MapUiBuilder(private val context: Context) {
         mapFrame.addView(tvEmptyMapNotice)
         container.addView(mapFrame)
 
-        // Map Legend
         val legendRow = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_HORIZONTAL
@@ -414,7 +406,7 @@ class MapUiBuilder(private val context: Context) {
         val tv = TextView(context).apply {
             text = label
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 11f)
-            setTextColor(Color.parseColor("#424242"))
+            setTextColor(textSecondary)
         }
 
         item.addView(dot)
@@ -428,7 +420,7 @@ class MapUiBuilder(private val context: Context) {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply { bottomMargin = dpToPx(12) }
-            setCardBackgroundColor(Color.parseColor("#F5F5F5"))
+            setCardBackgroundColor(bgCard)
             cardElevation = dpToPx(3).toFloat()
             radius = dpToPx(10).toFloat()
             visibility = View.GONE
@@ -443,7 +435,7 @@ class MapUiBuilder(private val context: Context) {
         tvReportTitle.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
             setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.parseColor("#212121"))
+            setTextColor(textPrimary)
         }
 
         tvReportBadge.apply {
@@ -462,18 +454,18 @@ class MapUiBuilder(private val context: Context) {
 
         tvReportDate.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-            setTextColor(Color.parseColor("#616161"))
+            setTextColor(textSecondary)
         }
 
         tvReportDesc.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
-            setTextColor(Color.parseColor("#424242"))
+            setTextColor(textPrimary)
             setPadding(0, dpToPx(6), 0, dpToPx(6))
         }
 
         tvReportCoords.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 11f)
-            setTextColor(Color.parseColor("#757575"))
+            setTextColor(textSecondary)
         }
 
         btnCloseReportCard.apply {
@@ -503,12 +495,11 @@ class MapUiBuilder(private val context: Context) {
             text = "Estadísticas del Periodo"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.parseColor("#1A237E"))
+            setTextColor(textPrimary)
             setPadding(0, dpToPx(8), 0, dpToPx(8))
         }
         mainLayout.addView(tvStatsHeader)
 
-        // Summary Metric Cards Grid (Row 1)
         val row1 = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
             weightSum = 3f
@@ -519,7 +510,6 @@ class MapUiBuilder(private val context: Context) {
         row1.addView(createMetricCard("Resueltas", tvMetricResolved, "#43A047"))
         mainLayout.addView(row1)
 
-        // Summary Metric Cards Grid (Row 2)
         val row2 = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
             weightSum = 3f
@@ -530,13 +520,12 @@ class MapUiBuilder(private val context: Context) {
         row2.addView(createMetricCard("Sin Ubic.", tvMetricNoLocation, "#757575"))
         mainLayout.addView(row2)
 
-        // Grouped Statistics Table Card
         val tableCard = MaterialCardView(context).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply { bottomMargin = dpToPx(16) }
-            setCardBackgroundColor(Color.WHITE)
+            setCardBackgroundColor(bgCard)
             cardElevation = dpToPx(2).toFloat()
             radius = dpToPx(10).toFloat()
         }
@@ -551,12 +540,11 @@ class MapUiBuilder(private val context: Context) {
             text = "Distribución por Tipo y Estado"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
             setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.parseColor("#212121"))
+            setTextColor(textPrimary)
             setPadding(0, 0, 0, dpToPx(8))
         }
         tableContainer.addView(tvTableTitle)
 
-        // Wrap Table in HorizontalScrollView for responsiveness
         val hScrollView = HorizontalScrollView(context).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -584,7 +572,7 @@ class MapUiBuilder(private val context: Context) {
                 leftMargin = dpToPx(3)
                 rightMargin = dpToPx(3)
             }
-            setCardBackgroundColor(Color.WHITE)
+            setCardBackgroundColor(bgCard)
             cardElevation = dpToPx(1).toFloat()
             radius = dpToPx(8).toFloat()
         }
@@ -599,7 +587,7 @@ class MapUiBuilder(private val context: Context) {
         val tvTitle = TextView(context).apply {
             text = title
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 10f)
-            setTextColor(Color.parseColor("#757575"))
+            setTextColor(textSecondary)
             setTypeface(null, Typeface.BOLD)
             gravity = Gravity.CENTER
         }
@@ -630,7 +618,7 @@ class MapUiBuilder(private val context: Context) {
             val switch = SwitchCompat(context).apply {
                 text = typeName
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
-                setTextColor(Color.parseColor("#424242"))
+                setTextColor(textPrimary)
                 isChecked = selectedTypeIds.isEmpty() || selectedTypeIds.contains(typeId)
                 setOnCheckedChangeListener { _, _ ->
                     onToggle(typeId)
@@ -644,23 +632,22 @@ class MapUiBuilder(private val context: Context) {
     fun populateStatsTable(stats: StatsSummary) {
         statsTableLayout.removeAllViews()
 
-        // Table Header
         val headerRow = TableRow(context).apply {
-            setBackgroundColor(Color.parseColor("#E8EAF6"))
+            setBackgroundColor(if (isDark) Color.parseColor("#374151") else Color.parseColor("#E8EAF6"))
             setPadding(0, dpToPx(6), 0, dpToPx(6))
         }
 
-        headerRow.addView(createTableCell("Tipo", true, "#1A237E"))
+        headerRow.addView(createTableCell("Tipo", true, if (isDark) "#F9FAFB" else "#1A237E"))
         headerRow.addView(createTableCell("Pend.", true, "#FFA000"))
         headerRow.addView(createTableCell("En Proc.", true, "#1976D2"))
         headerRow.addView(createTableCell("Resuel.", true, "#388E3C"))
-        headerRow.addView(createTableCell("Total", true, "#1A237E"))
+        headerRow.addView(createTableCell("Total", true, if (isDark) "#F9FAFB" else "#1A237E"))
 
         statsTableLayout.addView(headerRow)
 
         if (stats.typeStats.isEmpty()) {
             val emptyRow = TableRow(context)
-            val tv = createTableCell("Sin datos para mostrar", false, "#757575")
+            val tv = createTableCell("Sin datos para mostrar", false, if (isDark) "#9CA3AF" else "#757575")
             tv.gravity = Gravity.CENTER
             emptyRow.addView(tv)
             statsTableLayout.addView(emptyRow)
@@ -670,31 +657,30 @@ class MapUiBuilder(private val context: Context) {
         var alt = false
         for (item in stats.typeStats) {
             val row = TableRow(context).apply {
-                if (alt) setBackgroundColor(Color.parseColor("#F9F9F9"))
+                if (alt) setBackgroundColor(if (isDark) Color.parseColor("#262626") else Color.parseColor("#F9F9F9"))
                 setPadding(0, dpToPx(6), 0, dpToPx(6))
             }
             alt = !alt
 
-            row.addView(createTableCell(item.tipoName, false, "#212121"))
+            row.addView(createTableCell(item.tipoName, false, if (isDark) "#F9FAFB" else "#212121"))
             row.addView(createTableCell(item.pendingCount.toString(), false, "#FFA000"))
             row.addView(createTableCell(item.inProcessCount.toString(), false, "#1976D2"))
             row.addView(createTableCell(item.resolvedCount.toString(), false, "#388E3C"))
-            row.addView(createTableCell(item.totalCount.toString(), true, "#212121"))
+            row.addView(createTableCell(item.totalCount.toString(), true, if (isDark) "#F9FAFB" else "#212121"))
 
             statsTableLayout.addView(row)
         }
 
-        // Summary Total Row
         val totalRow = TableRow(context).apply {
-            setBackgroundColor(Color.parseColor("#E0E0E0"))
+            setBackgroundColor(if (isDark) Color.parseColor("#374151") else Color.parseColor("#E0E0E0"))
             setPadding(0, dpToPx(8), 0, dpToPx(8))
         }
 
-        totalRow.addView(createTableCell("TOTALES", true, "#000000"))
+        totalRow.addView(createTableCell("TOTALES", true, if (isDark) "#FFFFFF" else "#000000"))
         totalRow.addView(createTableCell(stats.pendingCount.toString(), true, "#FFA000"))
         totalRow.addView(createTableCell(stats.inProcessCount.toString(), true, "#1976D2"))
         totalRow.addView(createTableCell(stats.resolvedCount.toString(), true, "#388E3C"))
-        totalRow.addView(createTableCell(stats.totalReportsInPeriod.toString(), true, "#000000"))
+        totalRow.addView(createTableCell(stats.totalReportsInPeriod.toString(), true, if (isDark) "#FFFFFF" else "#000000"))
 
         statsTableLayout.addView(totalRow)
     }

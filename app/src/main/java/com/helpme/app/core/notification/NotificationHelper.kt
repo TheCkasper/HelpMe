@@ -67,7 +67,7 @@ object NotificationHelper {
         )
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID_INCIDENTS)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.mipmap.ic_helpme_launcher)
             .setContentTitle("🚨 Nuevo Reporte: $title")
             .setContentText(description)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -102,7 +102,7 @@ object NotificationHelper {
         )
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID_STATUS)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.mipmap.ic_helpme_launcher)
             .setContentTitle("📋 Estado Actualizado ($reportCode)")
             .setContentText("El reporte ahora está en estado: $newStatus. Toca para ver.")
             .setPriority(NotificationCompat.PRIORITY_HIGH)

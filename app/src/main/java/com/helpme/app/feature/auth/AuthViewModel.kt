@@ -67,7 +67,19 @@ class AuthViewModel : ViewModel() {
 
         viewModelScope.launch {
             _registerState.value = AuthResult.Loading
-            _registerState.value = authRepository.registerWithEmail(name, email, password)
+            val result = authRepository.registerWithEmail(name, email, password)
+            if (result is AuthResult.Success) {
+                try {
+                    val db = com.google.firebase.database.FirebaseDatabase.getInstance().reference
+                    val userRef = db.child("users").child(result.uid)
+                    userRef.child("name").setValue(name)
+                    userRef.child("email").setValue(email)
+                    userRef.child("rol").setValue("Ciudadano")
+                } catch (e: Exception) {
+                    // Ignore
+                }
+            }
+            _registerState.value = result
         }
     }
 

@@ -5,6 +5,7 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.helpme.app.domain.model.Report
 
 object GlobalNotificationListener {
@@ -13,6 +14,7 @@ object GlobalNotificationListener {
     private val database = FirebaseDatabase.getInstance().reference.child("reportes")
     private val knownReports = mutableMapOf<String, String>() // reportId -> estado
     private var isInitialLoadComplete = false
+    private val appStartTime = System.currentTimeMillis()
 
     fun startListening(context: Context) {
         if (isListening) return
@@ -20,11 +22,28 @@ object GlobalNotificationListener {
 
         val applicationContext = context.applicationContext
 
-        // Mark initial load complete after 2 seconds so we only notify for NEW events coming after startup
-        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-            isInitialLoadComplete = true
-        }, 2000)
+        // Step 1: Pre-load all existing report keys so past reports never trigger notifications
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (child in snapshot.children) {
+                    val report = child.getValue(Report::class.java)
+                    val key = child.key ?: report?.reporteId.orEmpty()
+                    if (key.isNotBlank()) {
+                        knownReports[key] = report?.estado.orEmpty()
+                    }
+                }
+                isInitialLoadComplete = true
+                attachRealtimeChildListener(applicationContext)
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+                isInitialLoadComplete = true
+                attachRealtimeChildListener(applicationContext)
+            }
+        })
+    }
+
+    private fun attachRealtimeChildListener(applicationContext: Context) {
         database.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 try {
@@ -32,10 +51,13 @@ object GlobalNotificationListener {
                     val key = snapshot.key ?: report.reporteId
                     val finalReport = if (report.reporteId.isBlank()) report.copy(reporteId = key) else report
 
+                    val isAlreadyKnown = knownReports.containsKey(key)
                     knownReports[key] = finalReport.estado
 
-                    // Only notify if initial load is complete (real-time new report created on ANY device)
-                    if (isInitialLoadComplete) {
+                    // Only notify for TRULY new reports created AFTER app start
+                    val isNewReportCreatedAfterAppStart = finalReport.fechaCreacion >= (appStartTime - 10000)
+
+                    if (!isAlreadyKnown && isInitialLoadComplete && isNewReportCreatedAfterAppStart) {
                         NotificationHelper.showNewReportNotification(
                             context = applicationContext,
                             reportId = finalReport.reporteId,

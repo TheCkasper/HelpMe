@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -18,6 +19,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.helpme.app.core.notification.GlobalNotificationListener
+import com.helpme.app.core.notification.NotificationForegroundService
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,7 +28,16 @@ class MainActivity : AppCompatActivity() {
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        // Permission result handled
+        if (!isGranted) {
+            AlertDialog.Builder(this)
+                .setTitle("Permiso de Notificaciones Requerido")
+                .setMessage("HelpMe necesita el permiso de notificaciones para alertarte en tiempo real sobre nuevas emergencias comunitarias publicadas en tu zona.")
+                .setPositiveButton("Conceder Permiso") { _, _ ->
+                    checkNotificationPermission()
+                }
+                .setNegativeButton("Continuar sin alertas", null)
+                .show()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         checkNotificationPermission()
-        GlobalNotificationListener.startListening(this)
+        startNotificationService()
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -56,11 +67,24 @@ class MainActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
 
         handleNotificationIntent(intent)
+    }
+
+    private fun startNotificationService() {
+        try {
+            val serviceIntent = Intent(this, NotificationForegroundService::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(serviceIntent)
+            } else {
+                startService(serviceIntent)
+            }
+        } catch (e: Exception) {
+            GlobalNotificationListener.startListening(this)
+        }
     }
 
     override fun onNewIntent(intent: Intent) {

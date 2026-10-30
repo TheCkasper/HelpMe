@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -20,6 +21,7 @@ import com.google.android.gms.common.api.ApiException
 import com.helpme.app.R
 import com.helpme.app.databinding.FragmentLoginBinding
 import com.helpme.app.domain.model.AuthResult
+import com.helpme.app.domain.model.SessionState
 import com.helpme.app.feature.auth.AuthViewModel
 import kotlinx.coroutines.launch
 
@@ -43,11 +45,24 @@ class LoginFragment : Fragment() {
                 if (!idToken.isNullOrBlank()) {
                     viewModel.loginWithGoogle(idToken)
                 } else {
-                    Toast.makeText(requireContext(), "No se obtuvo token de Google. Verifica habilitar Google en Firebase.", Toast.LENGTH_LONG).show()
+                    binding.progressBar.visibility = View.GONE
+                    binding.btnLogin.isEnabled = true
+                    showErrorDialog(
+                        "Error de Token Google",
+                        "Google autenticó la cuenta pero no devolvió un Web ID Token. Verifica que el servicio de Google Sign-In esté activo en Firebase Console."
+                    )
                 }
             } catch (e: ApiException) {
-                Toast.makeText(requireContext(), "Error de Google (${e.statusCode}): Habilita Google en Firebase Console", Toast.LENGTH_LONG).show()
+                binding.progressBar.visibility = View.GONE
+                binding.btnLogin.isEnabled = true
+                showErrorDialog(
+                    "Error de Google (${e.statusCode})",
+                    getGoogleErrorMessage(e.statusCode)
+                )
             }
+        } else {
+            binding.progressBar.visibility = View.GONE
+            binding.btnLogin.isEnabled = true
         }
     }
 
@@ -81,9 +96,13 @@ class LoginFragment : Fragment() {
         binding.btnGoogle.setOnClickListener {
             val client = googleSignInClient
             if (client != null) {
-                googleSignInLauncher.launch(client.signInIntent)
+                binding.progressBar.visibility = View.VISIBLE
+                binding.btnLogin.isEnabled = false
+                client.signOut().addOnCompleteListener {
+                    googleSignInLauncher.launch(client.signInIntent)
+                }
             } else {
-                Toast.makeText(requireContext(), "Google Sign-In: Habilita el proveedor Google en Firebase Console.", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Google Sign-In no inicializado.", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -91,8 +110,8 @@ class LoginFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.sessionState.collect { state ->
-                        if (state is com.helpme.app.domain.model.SessionState.Authenticated) {
-                            findNavController().navigate(R.id.action_login_to_home)
+                        if (state is SessionState.Authenticated) {
+                            navigateToHomeSafely()
                         }
                     }
                 }
@@ -110,12 +129,13 @@ class LoginFragment : Fragment() {
                             is AuthResult.Success -> {
                                 binding.progressBar.visibility = View.GONE
                                 binding.btnLogin.isEnabled = true
+                                navigateToHomeSafely()
                                 viewModel.resetStates()
                             }
                             is AuthResult.Error -> {
                                 binding.progressBar.visibility = View.GONE
                                 binding.btnLogin.isEnabled = true
-                                Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                                showErrorDialog("Error al iniciar sesión", state.message)
                                 viewModel.resetStates()
                             }
                         }
@@ -125,21 +145,45 @@ class LoginFragment : Fragment() {
         }
     }
 
+    private fun navigateToHomeSafely() {
+        try {
+            if (findNavController().currentDestination?.id == R.id.loginFragment) {
+                findNavController().navigate(R.id.action_login_to_home)
+            }
+        } catch (e: Exception) {
+            // Already navigated
+        }
+    }
+
     private fun setupGoogleSignIn() {
         try {
-            val webClientIdResId = resources.getIdentifier("default_web_client_id", "string", requireContext().packageName)
-            val webClientId = if (webClientIdResId != 0) getString(webClientIdResId) else ""
+            val webClientId = "413805580217-tmi6lsosj8oilcukt62sger7597eemrv.apps.googleusercontent.com"
 
-            val gsoBuilder = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(webClientId)
                 .requestEmail()
+                .build()
 
-            if (webClientId.isNotBlank()) {
-                gsoBuilder.requestIdToken(webClientId)
-            }
-
-            googleSignInClient = GoogleSignIn.getClient(requireActivity(), gsoBuilder.build())
+            googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
         } catch (e: Exception) {
             googleSignInClient = null
+        }
+    }
+
+    private fun showErrorDialog(title: String, message: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("Aceptar", null)
+            .show()
+    }
+
+    private fun getGoogleErrorMessage(statusCode: Int): String {
+        return when (statusCode) {
+            10 -> "Código 10 (DEVELOPER_ERROR): Ocurre si el proveedor Google Sign-In no está habilitado en Firebase Console o la huella SHA-1 no coincide."
+            12500 -> "Código 12500 (SIGN_IN_FAILED): La cuenta de Google rechazó la autenticación. Intenta con otro correo de Gmail."
+            7 -> "Código 7 (NETWORK_ERROR): Error de conexión a Internet en el dispositivo."
+            else -> "Código $statusCode: No se pudo completar la autenticación con Google."
         }
     }
 

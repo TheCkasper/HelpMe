@@ -24,12 +24,21 @@ class ProfileRepository(
         val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 var profile = snapshot.getValue(UserProfile::class.java)
+                val firebaseDisplayName = auth.currentUser?.displayName.orEmpty()
+
                 if (profile == null) {
-                    profile = UserProfile(uid = uid, email = currentEmail)
-                    // Initial creation in Realtime Database if absent
+                    val initialName = firebaseDisplayName.ifBlank { "" }
+                    profile = UserProfile(uid = uid, email = currentEmail, name = initialName)
                     userRef(uid).child("email").setValue(currentEmail)
+                    if (initialName.isNotBlank()) {
+                        userRef(uid).child("name").setValue(initialName)
+                    }
                     userRef(uid).child("rol").setValue("Ciudadano")
+                } else if (profile.name.isBlank() && firebaseDisplayName.isNotBlank()) {
+                    profile = profile.copy(name = firebaseDisplayName)
+                    userRef(uid).child("name").setValue(firebaseDisplayName)
                 }
+
                 onData(profile.copy(uid = uid))
             }
 

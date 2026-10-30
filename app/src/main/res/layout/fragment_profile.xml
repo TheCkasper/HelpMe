@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/helpme_card_background"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
             app:strokeWidth="0dp"
@@ -95,6 +95,7 @@
                         android:id="@+id/etName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/helpme_text_primary"
                         android:inputType="textPersonName|textCapWords" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -110,6 +111,7 @@
                         android:id="@+id/etPhone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/helpme_text_primary"
                         android:inputType="phone" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -127,6 +129,7 @@
                         android:id="@+id/etDpi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/helpme_text_primary"
                         android:inputType="number"
                         android:maxLength="13" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -151,7 +154,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/helpme_card_background"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
             app:strokeWidth="0dp"

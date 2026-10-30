@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class ReportDetailFragment : Fragment() {
 
@@ -64,6 +65,10 @@ class ReportDetailFragment : Fragment() {
             showStatusDialog()
         }
 
+        binding.btnDeleteReport.setOnClickListener {
+            showDeleteConfirmationDialog()
+        }
+
         checkAdminRoleAndConfigureButton()
         loadReportDetail()
         observeUpdateState()
@@ -73,27 +78,34 @@ class ReportDetailFragment : Fragment() {
         val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
         if (uid.isNullOrBlank()) {
             binding.btnUpdateStatus.visibility = View.GONE
+            binding.btnDeleteReport.visibility = View.GONE
             return
         }
 
-        val db = com.google.firebase.database.FirebaseDatabase.getInstance().reference
-        db.child("users").child(uid).child("rol").get()
-            .addOnSuccessListener { snapshot ->
-                val rol = snapshot.getValue(String::class.java) ?: ""
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val db = com.google.firebase.database.FirebaseDatabase.getInstance().reference
+                val snap = db.child("users").child(uid).child("rol").get().await()
+                val rol = snap.getValue(String::class.java).orEmpty()
                 val isAdmin = rol.equals("Administrador", ignoreCase = true) || rol.equals("Admin", ignoreCase = true)
+
                 binding.btnUpdateStatus.visibility = if (isAdmin) View.VISIBLE else View.GONE
+                binding.btnDeleteReport.visibility = if (isAdmin) View.VISIBLE else View.GONE
+            } catch (e: Exception) {
+                try {
+                    val db = com.google.firebase.database.FirebaseDatabase.getInstance().reference
+                    val snap = db.child("usuarios").child(uid).child("rol").get().await()
+                    val rol = snap.getValue(String::class.java).orEmpty()
+                    val isAdmin = rol.equals("Administrador", ignoreCase = true) || rol.equals("Admin", ignoreCase = true)
+
+                    binding.btnUpdateStatus.visibility = if (isAdmin) View.VISIBLE else View.GONE
+                    binding.btnDeleteReport.visibility = if (isAdmin) View.VISIBLE else View.GONE
+                } catch (ex: Exception) {
+                    binding.btnUpdateStatus.visibility = View.GONE
+                    binding.btnDeleteReport.visibility = View.GONE
+                }
             }
-            .addOnFailureListener {
-                db.child("usuarios").child(uid).child("rol").get()
-                    .addOnSuccessListener { snap ->
-                        val r = snap.getValue(String::class.java) ?: ""
-                        val isAdmin = r.equals("Administrador", ignoreCase = true) || r.equals("Admin", ignoreCase = true)
-                        binding.btnUpdateStatus.visibility = if (isAdmin) View.VISIBLE else View.GONE
-                    }
-                    .addOnFailureListener {
-                        binding.btnUpdateStatus.visibility = View.GONE
-                    }
-            }
+        }
     }
 
     private fun loadReportDetail() {
@@ -222,6 +234,33 @@ class ReportDetailFragment : Fragment() {
             _updateState.value = result
             if (result is OperationResult.Success) {
                 loadReportDetail()
+            }
+        }
+    }
+
+    private fun showDeleteConfirmationDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Eliminar reporte permanentemente")
+            .setMessage("¿Estás seguro de que deseas eliminar este reporte? Esta acción lo borrará de la base de datos y no se podrá deshacer.")
+            .setPositiveButton("Eliminar") { _, _ ->
+                deleteCurrentReport()
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun deleteCurrentReport() {
+        if (reportId.isBlank()) return
+
+        binding.progressBar.visibility = View.VISIBLE
+        viewLifecycleOwner.lifecycleScope.launch {
+            val result = reportRepository.deleteReport(reportId)
+            binding.progressBar.visibility = View.GONE
+            if (result is OperationResult.Success) {
+                Toast.makeText(requireContext(), "Reporte eliminado exitosamente", Toast.LENGTH_SHORT).show()
+                findNavController().navigateUp()
+            } else if (result is OperationResult.Error) {
+                Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
             }
         }
     }

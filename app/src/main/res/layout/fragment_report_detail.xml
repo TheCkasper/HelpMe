@@ -169,6 +169,22 @@
                 app:backgroundTint="@color/helpme_green"
                 app:cornerRadius="8dp" />
 
+            <!-- Delete Report Button (Admin Only) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDeleteReport"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:paddingVertical="12dp"
+                android:text="Eliminar reporte"
+                android:textAllCaps="false"
+                android:textColor="#D32F2F"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:strokeColor="#D32F2F"
+                app:cornerRadius="8dp" />
+
         </LinearLayout>
 
         <ProgressBar
